@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/commons/entities/BaseEntity';
 import { Role } from 'src/commons/role/entities/role.entity';
-import { Column, Entity, ManyToMany, JoinTable } from 'typeorm';
+import { Message } from 'src/messages/entities/message.entity';
+import { Column, Entity, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -26,4 +27,7 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true, name: 'last_visit' })
   lastVisit: Date;
+
+  @OneToMany((type) => Message, (message) => message.user)
+  messages: Message[];
 }
