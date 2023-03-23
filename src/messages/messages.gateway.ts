@@ -1,15 +1,22 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: '*' })
 export class MessagesGateway {
   constructor(private readonly messagesService: MessagesService) {}
+  @WebSocketServer() server;
 
-  @SubscribeMessage('createMessage')
-  create(@MessageBody() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
+  @SubscribeMessage('message')
+  handleMessage(@MessageBody() message: string): void {
+    console.log(this.server);
+
+    this.server.emit('message', message);
   }
 
   @SubscribeMessage('findAllMessages')

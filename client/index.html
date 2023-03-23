@@ -4,9 +4,51 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Chat</title>
   </head>
   <body>
-    <h1>hello man</h1>
+    <div>
+      <ul id="messages"></ul>
+    </div>
+    <div>
+      <form id="btn" action="">
+        <input type="text" name="" id="message" />
+        <button>send</button>
+      </form>
+    </div>
+    <script
+      src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const socket = io('http://localhost:3000');
+      const message = document.getElementById('message');
+      const messages = document.getElementById('messages');
+      const btn = document.getElementById('btn');
+
+      btn.addEventListener('submit', emitMessage);
+
+      function emitMessage(e) {
+        e.preventDefault();
+
+        socket.emit('message', { data: message.value });
+        message.value = '';
+      }
+
+      socket.on('message', ({ data }) => {
+        handleNewMessage(data);
+      });
+
+      function handleNewMessage(message) {
+        messages.appendChild(buildNewMessage(message));
+      }
+
+      function buildNewMessage(message) {
+        let li = document.createElement('li');
+        li.textContent = message;
+        return li;
+      }
+    </script>
   </body>
 </html>

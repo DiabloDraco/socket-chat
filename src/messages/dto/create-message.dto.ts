@@ -13,7 +13,4 @@ export class CreateMessageDto {
   isPhoto: boolean;
 
   photo: string;
-
-  @IsNotEmpty()
-  userTo: User;
 }

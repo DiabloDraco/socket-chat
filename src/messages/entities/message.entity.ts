@@ -16,7 +16,4 @@ export class Message extends BaseEntity {
 
   @Column({ nullable: true })
   photo: string;
-
-  @ManyToOne(() => User)
-  userTo: User;
 }
